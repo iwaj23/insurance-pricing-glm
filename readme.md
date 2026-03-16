@@ -2,15 +2,37 @@ Insurance Pricing Model — Frequency–Severity GLM
 
 This project implements an actuarial insurance pricing model using a frequency–severity framework.
 
-The model estimates the expected pure premium of an insurance policy by separately modeling:
+The model estimates the expected loss cost of insurance policies by modeling:
 
-Claim frequency (number of claims)
+Claim frequency (number of claims per policy)
 
 Claim severity (size of claims)
 
-The two models are combined to estimate the expected loss cost for each policy.
+The two models are combined to estimate the pure premium, which represents the expected annual claim cost for a policy.
 
-The goal of the project is to demonstrate how actuaries build and validate insurance pricing models using generalized linear models (GLMs).
+This project demonstrates how actuaries build and validate insurance pricing models using generalized linear models (GLMs).
+
+Model Features
+
+The model includes:
+
+Claim frequency modeling using a Poisson GLM
+
+Claim severity modeling using a Gamma GLM
+
+Pure premium estimation using the frequency–severity framework
+
+Risk relativities derived from model coefficients
+
+Policy-level premium estimation
+
+Decile validation of predicted risk
+
+Lorenz curve analysis for model discrimination
+
+Gini coefficient calculation
+
+Visualization of model diagnostics
 
 Pricing Framework
 
@@ -24,13 +46,14 @@ Frequency = expected number of claims per policy
 
 Severity = expected cost per claim
 
-The model predicts both components using GLMs and multiplies them to estimate the expected annual loss cost.
+The model predicts both components using GLMs and multiplies them to estimate the expected loss cost.
 
 Dataset
 
-The dataset contains automobile insurance policy data with policyholder characteristics and claim information.
+The dataset contains automobile insurance policy data with policyholder characteristics and claim outcomes.
 
-Key Variables
+Key variables include:
+
 Variable	Description
 DrivAge	Driver age
 VehAge	Vehicle age
@@ -43,7 +66,7 @@ Area	Urban density category
 ClaimNb	Number of claims
 ClaimAmount	Claim severity
 
-The dataset includes hundreds of thousands of policies, enabling realistic modeling of insurance risk.
+The dataset includes hundreds of thousands of policies, allowing realistic modeling of insurance risk.
 
 Modeling Approach
 
@@ -51,115 +74,51 @@ Two generalized linear models are estimated.
 
 Frequency Model
 
-The claim frequency model estimates the expected number of claims.
-
-Model specification:
+Claim frequency is modeled using a Poisson GLM with a log link:
 
 ClaimNb ~ Poisson(λ)
+
 log(λ) = Xβ
 
-Key features:
-
-Poisson GLM
-
-Exposure adjustment
-
-Log link function
-
-Policy-level predictors
-
-This model estimates the expected claim frequency for each policy.
+This model estimates the expected number of claims per policy.
 
 Severity Model
 
-The claim severity model estimates the expected claim cost.
-
-Model specification:
+Claim severity is modeled using a Gamma GLM with a log link:
 
 ClaimAmount ~ Gamma(μ)
+
 log(μ) = Xβ
-
-Key features:
-
-Gamma GLM
-
-Log link
-
-Policy characteristics as predictors
 
 This model estimates the expected claim size conditional on a claim occurring.
 
-Pure Premium Estimation
-
-The expected annual loss cost for a policy is calculated as:
-
-Pure Premium = Predicted Frequency × Predicted Severity
-
-Example output from the model:
-
-Predicted Frequency	Predicted Severity	Pure Premium
-0.1227	2715	333
-
-This represents the expected annual loss cost for the policy.
-
 Model Validation
 
-Several techniques were used to evaluate model performance.
+Model performance was evaluated using several techniques.
 
 Decile Validation
 
-Policies were sorted by predicted risk and grouped into risk deciles.
+Policies were ranked by predicted risk and grouped into risk deciles.
 
-Observed and predicted claim frequencies were compared across deciles to verify that the model correctly ranks risk from low-risk to high-risk policies.
+Observed and predicted claim frequencies were compared across deciles to confirm that the model correctly ranks policies from low risk to high risk.
 
 Lorenz Curve
 
 The Lorenz curve evaluates the model’s ability to discriminate between high-risk and low-risk policies.
 
-The curve compares:
+If the model has predictive power, the curve deviates from the random baseline.
 
-cumulative share of exposure
-
-cumulative share of claims
-
-If the model has predictive power, the curve will deviate from the random baseline.
-
-(Insert plot image here)
-
-outputs/lorenz_curve.png
 Gini Coefficient
 
 The Gini coefficient summarizes the discriminatory power of the model.
 
-Gini = 1 − 2 ∫₀¹ L(p) dp
+Gini = 1 − 2 ∫ L(p) dp
 
-Where L(p) represents the Lorenz curve.
+Model result:
 
-Model Result
 Gini coefficient = 0.31
 
-Interpretation:
-
-Gini	Meaning
-0	No predictive power
-0.1–0.2	Weak
-0.2–0.3	Moderate
-0.3+	Strong
-
-A value of 0.31 indicates strong discrimination for an insurance pricing model.
-
-Rating Factors
-
-Model coefficients were converted into risk relativities used in insurance rating.
-
-Example:
-
-Factor	Level	Relativity
-Area	F	1.25
-Region	R74	1.20
-Vehicle Brand	B12	1.18
-
-These factors represent multiplicative adjustments to the base premium.
+A value above 0.30 indicates strong risk discrimination for an insurance pricing model.
 
 Sample Policy Quote
 
@@ -175,23 +134,23 @@ Model output:
 Predicted Frequency	Predicted Severity	Pure Premium
 0.1227	2715	333
 
-This represents the expected annual loss cost.
+This represents the expected annual claim cost for the policy.
 
-Visualizations
+Visual Outputs
 
-The project includes several diagnostic plots:
+The program generates the following visualizations:
 
-Observed vs Predicted Frequency
+Observed vs predicted claim frequency
 
-Risk Decile Validation
+Risk decile validation chart
 
-Pure Premium Distribution
+Predicted pure premium distribution
 
-GLM Residual Diagnostics
+GLM residual diagnostics
 
-Lorenz Curve
+Lorenz curve for model discrimination
 
-Tools Used
+Technologies Used
 
 Python
 
@@ -203,51 +162,25 @@ Statsmodels
 
 Matplotlib
 
-Key Actuarial Concepts Demonstrated
+How to Run
 
-This project demonstrates several core actuarial pricing techniques:
+Install dependencies:
 
-Frequency–severity modeling
+pip install -r requirements.txt
 
-Poisson GLM
+Run the model:
 
-Gamma GLM
+python exploration.py
+Purpose
 
-Risk relativities
+This project demonstrates actuarial risk modeling techniques used in insurance pricing, including:
 
-Decile validation
+frequency–severity modeling
 
-Lorenz curve analysis
+generalized linear models
 
-Gini coefficient
+insurance rating factors
 
-Pure premium estimation
+risk discrimination analysis
 
-Project Structure
-insurance-pricing-glm
-│
-├── data
-│
-├── src
-│   └── exploration.py
-│
-├── outputs
-│   ├── lorenz_curve.png
-│   ├── observed_vs_predicted_decile.png
-│
-├── README.md
-Possible Extensions
-
-Future improvements could include:
-
-regularized GLMs
-
-gradient boosting models
-
-feature engineering
-
-out-of-sample validation
-
-credibility adjustments
-
-full premium calculation including expenses and profit loading
+The goal is to illustrate how actuarial pricing models estimate expected loss costs and evaluate predictive performance.
