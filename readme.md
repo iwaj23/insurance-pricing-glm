@@ -1,6 +1,7 @@
 Insurance Pricing Model — Frequency–Severity GLM
 
 This project implements an actuarial insurance pricing model using a frequency–severity framework.
+
 The model estimates the expected pure premium of an insurance policy by separately modeling:
 
 Claim frequency (number of claims)
@@ -15,8 +16,7 @@ Pricing Framework
 
 Insurance pricing is commonly modeled using the frequency–severity decomposition:
 
-Pure Premium=Claim Frequency×Claim Severity
-Pure Premium=Claim Frequency×Claim Severity
+Pure Premium = Claim Frequency × Claim Severity
 
 Where:
 
@@ -55,13 +55,8 @@ The claim frequency model estimates the expected number of claims.
 
 Model specification:
 
-ClaimNb∼Poisson(λ)
-ClaimNb∼Poisson(λ)
-
-with log link:
-
-log⁡(λ)=Xβ
-log(λ)=Xβ
+ClaimNb ~ Poisson(λ)
+log(λ) = Xβ
 
 Key features:
 
@@ -81,13 +76,8 @@ The claim severity model estimates the expected claim cost.
 
 Model specification:
 
-ClaimAmount∼Gamma(μ)
-ClaimAmount∼Gamma(μ)
-
-with log link:
-
-log⁡(μ)=Xβ
-log(μ)=Xβ
+ClaimAmount ~ Gamma(μ)
+log(μ) = Xβ
 
 Key features:
 
@@ -103,8 +93,7 @@ Pure Premium Estimation
 
 The expected annual loss cost for a policy is calculated as:
 
-Pure Premium=Predicted Frequency×Predicted Severity
-Pure Premium=Predicted Frequency×Predicted Severity
+Pure Premium = Predicted Frequency × Predicted Severity
 
 Example output from the model:
 
@@ -121,53 +110,43 @@ Decile Validation
 
 Policies were sorted by predicted risk and grouped into risk deciles.
 
-Observed and predicted claim frequencies were compared across deciles.
+Observed and predicted claim frequencies were compared across deciles to verify that the model correctly ranks risk from low-risk to high-risk policies.
 
-This evaluates whether the model correctly ranks policies from low risk to high risk.
-
-Example validation output:
-
-Risk Decile	Observed Frequency	Predicted Frequency
-1	Low	Low
-...	...	...
-10	High	High
 Lorenz Curve
 
 The Lorenz curve evaluates the model’s ability to discriminate between high-risk and low-risk policies.
 
 The curve compares:
 
-cumulative share of policies
+cumulative share of exposure
 
 cumulative share of claims
 
 If the model has predictive power, the curve will deviate from the random baseline.
 
+(Insert plot image here)
+
+outputs/lorenz_curve.png
 Gini Coefficient
 
 The Gini coefficient summarizes the discriminatory power of the model.
 
-Gini=1−2∫01L(p)dp
-Gini=1−2∫
-0
-1
-	​
+Gini = 1 − 2 ∫₀¹ L(p) dp
 
-L(p)dp
+Where L(p) represents the Lorenz curve.
 
-Where
-L(p)
-L(p) is the Lorenz curve.
-
-Model result:
-
+Model Result
 Gini coefficient = 0.31
 
 Interpretation:
 
-0 = no predictive power
+Gini	Meaning
+0	No predictive power
+0.1–0.2	Weak
+0.2–0.3	Moderate
+0.3+	Strong
 
-0.3+ = strong discrimination for insurance pricing models
+A value of 0.31 indicates strong discrimination for an insurance pricing model.
 
 Rating Factors
 
@@ -212,8 +191,6 @@ GLM Residual Diagnostics
 
 Lorenz Curve
 
-Example:
-
 Tools Used
 
 Python
@@ -247,18 +224,18 @@ Gini coefficient
 Pure premium estimation
 
 Project Structure
-glmPricingModel
+insurance-pricing-glm
 │
-├─ data
+├── data
 │
-├─ src
-│   exploration.py
+├── src
+│   └── exploration.py
 │
-├─ outputs
-│   lorenz_curve.png
-│   observed_vs_predicted_decile.png
+├── outputs
+│   ├── lorenz_curve.png
+│   ├── observed_vs_predicted_decile.png
 │
-├─ README.md
+├── README.md
 Possible Extensions
 
 Future improvements could include:
