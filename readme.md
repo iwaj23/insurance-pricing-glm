@@ -252,19 +252,20 @@ The project includes several diagnostic plots:
 
 ## Project Structure
 
-
+```
 insurance-pricing-glm
 │
 ├── data
 │
 ├── src
-│ └── exploration.py
+│   └── exploration.py
 │
 ├── outputs
-│ ├── lorenz_curve.png
-│ ├── observed_vs_predicted_decile.png
+│   ├── lorenz_curve.png
+│   └── observed_vs_predicted_decile.png
 │
-├── README.md
+└── README.md
+```
 
 
 ---
