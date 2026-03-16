@@ -239,6 +239,15 @@ The project includes several diagnostic plots:
 - Lorenz Curve
 
 ---
+## Example Output
+
+### Lorenz Curve
+
+![Lorenz Curve](outputs/lorenz_curve.png)
+
+### Decile Validation
+
+![Decile Validation](outputs/observed_vs_predicted_decile.png)
 
 ## Technologies Used
 
